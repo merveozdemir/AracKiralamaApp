@@ -1,4 +1,4 @@
-package com.vaadin.domain.Enums;
+package com.vaadin.domain.enums;
 
 public enum EnumKullaniciTuru {
     Uye,

@@ -2,15 +2,10 @@ package com.vaadin.ui.views;
 
 import com.vaadin.MyUI;
 import com.vaadin.dao.KullaniciDao;
-import com.vaadin.domain.Enums.EnumKullaniciTuru;
+import com.vaadin.domain.enums.EnumKullaniciTuru;
 import com.vaadin.domain.Kullanici;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.LoginButton;
-import com.vaadin.ui.themes.ValoTheme;
-
-import java.util.List;
-
-import static com.vaadin.domain.Enums.EnumKullaniciTuru.Admin;
 
 public class KullaniciGirisContentView extends VerticalLayout {
     FormLayout formLayout;

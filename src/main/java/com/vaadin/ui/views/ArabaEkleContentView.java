@@ -4,16 +4,13 @@ import com.vaadin.dao.AracDao;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.domain.Arac;
-import com.vaadin.domain.Enums.EnumVitesTuru;
-import com.vaadin.domain.Enums.EnumYakitTuru;
+import com.vaadin.domain.enums.EnumVitesTuru;
+import com.vaadin.domain.enums.EnumYakitTuru;
 import com.vaadin.event.ItemClickEvent;
-import com.vaadin.shared.ui.MultiSelectMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.DeleteButton;
 import com.vaadin.ui.components.SaveButton;
-import com.vaadin.ui.themes.ValoTheme;
 
-import java.util.Date;
 import java.util.List;
 
 public class ArabaEkleContentView extends HorizontalLayout {

@@ -28,10 +28,13 @@ public class KiralamaDao {
 
     public List<Kiralama> tumKiralamalariGetir() {
         List<Kiralama> kiralamaList = null;
-        Map<String, Kiralama> kiralamaMap = new HashMap();
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         try (Session session = sessionFactory.openSession();) {
-            String hql = "Select kiralama from Kiralama as kiralama left join fetch kiralama.arac arac left join fetch kiralama.kullanici kullanici";
+            String hql =
+                    "Select kiralama " +
+                    "from Kiralama as kiralama " +
+                    "left join fetch kiralama.arac arac " +
+                    "left join fetch kiralama.kullanici kullanici";
             Query query = session.createQuery(hql);
             kiralamaList = query.list();
         } catch (Exception ex) {
@@ -61,7 +64,7 @@ public class KiralamaDao {
             session.getTransaction().begin();
             String hql = "delete from Kiralama kiralama where kiralama.id=:id";
             Query query = session.createQuery(hql);
-            query.setLong("id", kiralama.getId());
+            query.setParameter("id", kiralama.getId());
             query.executeUpdate();
             session.getTransaction().commit();
         } catch (Exception ex) {

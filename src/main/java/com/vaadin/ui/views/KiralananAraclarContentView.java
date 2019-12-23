@@ -1,18 +1,16 @@
 package com.vaadin.ui.views;
 
-import com.vaadin.MyUI;
 import com.vaadin.dao.KiralamaDao;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.domain.Arac;
-import com.vaadin.domain.Enums.EnumAlisOfisi;
+import com.vaadin.domain.enums.EnumAlisOfisi;
 import com.vaadin.domain.Kiralama;
 import com.vaadin.domain.Kullanici;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.shared.ui.MultiSelectMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.components.DeleteButton;
 
 import java.util.Date;

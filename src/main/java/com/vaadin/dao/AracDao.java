@@ -45,7 +45,7 @@ public class AracDao {
             session.getTransaction().begin();
             String hql = "delete from Arac arac where arac.id=:id";
             Query query = session.createQuery(hql);
-            query.setLong("id", arac.getId());
+            query.setParameter("id", arac.getId());
             query.executeUpdate();
             session.getTransaction().commit();
         } catch (Exception ex) {

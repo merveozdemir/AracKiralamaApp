@@ -1,18 +1,12 @@
 package com.vaadin.domain;
 
-import com.google.web.bindery.autobean.shared.impl.EnumMap;
-import com.vaadin.MyUI;
 import com.vaadin.common.BaseDomain;
-import com.vaadin.domain.Enums.EnumKullaniciTuru;
-import com.vaadin.ui.UI;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
-import org.jsoup.Connection;
+import com.vaadin.domain.enums.EnumKullaniciTuru;
 
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 @Entity
 @Table(name = "KULLANICI")

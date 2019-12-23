@@ -1,15 +1,14 @@
 package com.vaadin.ui.views;
 
-import com.sun.javafx.binding.StringFormatter;
 import com.vaadin.MyUI;
 import com.vaadin.dao.AracDao;
 import com.vaadin.dao.KiralamaDao;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.domain.Arac;
-import com.vaadin.domain.Enums.EnumAlisOfisi;
-import com.vaadin.domain.Enums.EnumVitesTuru;
-import com.vaadin.domain.Enums.EnumYakitTuru;
+import com.vaadin.domain.enums.EnumAlisOfisi;
+import com.vaadin.domain.enums.EnumVitesTuru;
+import com.vaadin.domain.enums.EnumYakitTuru;
 import com.vaadin.domain.Kiralama;
 import com.vaadin.domain.Kullanici;
 import com.vaadin.event.ItemClickEvent;

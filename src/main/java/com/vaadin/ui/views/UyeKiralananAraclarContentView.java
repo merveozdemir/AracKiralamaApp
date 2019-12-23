@@ -5,7 +5,7 @@ import com.vaadin.dao.KiralamaDao;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.domain.Arac;
-import com.vaadin.domain.Enums.EnumAlisOfisi;
+import com.vaadin.domain.enums.EnumAlisOfisi;
 import com.vaadin.domain.Kiralama;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Table;

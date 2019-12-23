@@ -1,14 +1,14 @@
 package com.vaadin.domain;
 
-import com.sun.jmx.snmp.SnmpUnknownAccContrModelException;
 import com.vaadin.common.BaseDomain;
-import com.vaadin.domain.Enums.EnumVitesTuru;
-import com.vaadin.domain.Enums.EnumYakitTuru;
+import com.vaadin.domain.enums.EnumVitesTuru;
+import com.vaadin.domain.enums.EnumYakitTuru;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import javax.xml.namespace.QName;
 
+@Audited
 @Entity
 @Table(name = "ARAC")
 public class Arac extends BaseDomain {

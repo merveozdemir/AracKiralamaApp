@@ -1,7 +1,7 @@
 package com.vaadin.domain;
 
 import com.vaadin.common.BaseDomain;
-import com.vaadin.domain.Enums.EnumAlisOfisi;
+import com.vaadin.domain.enums.EnumAlisOfisi;
 
 import javax.persistence.*;
 import java.util.Date;
