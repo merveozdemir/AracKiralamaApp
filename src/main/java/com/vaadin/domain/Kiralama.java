@@ -18,7 +18,7 @@ public class Kiralama extends BaseDomain {
     @JoinColumn(name = "ID_ARAC", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "KIRALAMA_ARAC_ID"))
     private Arac arac;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_KULLANICI", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "KIRALAMA_KULLANICI_ID"))
     private Kullanici kullanici;
 

@@ -2,44 +2,74 @@ package com.vaadin.ui.views;
 
 import com.vaadin.dao.AracDao;
 import com.vaadin.data.Item;
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.fieldgroup.PropertyId;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.IndexedContainer;
+
 import com.vaadin.domain.Arac;
 import com.vaadin.domain.enums.EnumVitesTuru;
 import com.vaadin.domain.enums.EnumYakitTuru;
 import com.vaadin.event.ItemClickEvent;
+import com.vaadin.shared.ui.MultiSelectMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.DeleteButton;
 import com.vaadin.ui.components.SaveButton;
+import com.vaadin.ui.components.StTextField;
 
 import java.util.List;
 
 public class ArabaEkleContentView extends HorizontalLayout {
     FormLayout formLayout;
-    TextField idField;
-    TextField markaField;
-    TextField modelField;
-    TextField koltukSayisiField;
-    TextField kapiSayisiField;
+
+    @PropertyId("id")
+    StTextField idField;
+
+    @PropertyId("aracMarka")
+    StTextField markaField;
+
+    @PropertyId("aracModel")
+    StTextField modelField;
+
+    @PropertyId("koltukSayisi")
+    StTextField koltukSayisiField;
+
+    @PropertyId("kapiSayisi")
+    StTextField kapiSayisiField;
+
+    @PropertyId("klimali")
     CheckBox klimali;
+
+    @PropertyId("enumYakitTuru")
     ComboBox yakitTuruComboBox;
+
+    @PropertyId("enumVitesTuru")
     ComboBox vitesTuruComboBox;
-    TextField gunlulKiraUcreti;
+
+    @PropertyId("gunlukKiralamaUreti")
+    StTextField gunlukKiraUcreti;
+
     SaveButton saveButton;
     DeleteButton deleteButton;
     Table table;
     IndexedContainer indexedContainer;
     Arac arac;
+    BeanItem<Arac> item;
+    FieldGroup binder;
 
     public ArabaEkleContentView() {
         setSpacing(true);
 
         buildFormLayout();
-        addComponent(formLayout);
+       // addComponent(formLayout);
+
+        fillViewByArac(new Arac());
 
         buildTableContainer();
         buildTable();
         fillTable();
         addComponent(table);
+
     }
 
     private void buildTableContainer() {
@@ -68,7 +98,7 @@ public class ArabaEkleContentView extends HorizontalLayout {
             item.getItemProperty("yakitTuru").setValue(arac.getEnumYakitTuru());
             item.getItemProperty("vitesTuru").setValue(arac.getEnumVitesTuru());
 
-            if(arac.isKlimali().equals(true)){
+            if(arac.isKlimali() == true){
                 item.getItemProperty("klimali").setValue("Var");
             }else{
                 item.getItemProperty("klimali").setValue("Yok");
@@ -83,6 +113,9 @@ public class ArabaEkleContentView extends HorizontalLayout {
         table.setHeight("400px");
         table.setWidth("650px");
         table.setContainerDataSource(indexedContainer);
+        table.setSelectable(true);
+        table.setMultiSelectMode(MultiSelectMode.SIMPLE);
+        table.setMultiSelect(false);
         table.setColumnHeaders("NO", "MARKA", "MODEL", "KAPI SAYISI", "KOLTUK SAYISI", "YAKIT TÜRÜ", "VİTES TÜRÜ", "KLİMA DURUMU", "GÜNLÜK KİRA ÜCRETİ");
         table.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
@@ -96,16 +129,9 @@ public class ArabaEkleContentView extends HorizontalLayout {
     }
 
     private void fillViewByArac(Arac arac) {
-        idField.setValue(arac.getId().toString());
-        markaField.setValue(arac.getAracMarka());
-        modelField.setValue(arac.getAracModel());
-        koltukSayisiField.setValue(String.valueOf(arac.getKoltukSayisi()));
-        kapiSayisiField.setValue(String.valueOf(arac.getKapiSayisi()));
-        klimali.setValue(arac.isKlimali());
-        yakitTuruComboBox.select(arac.getEnumYakitTuru());
-        vitesTuruComboBox.select(arac.getEnumVitesTuru());
-        gunlulKiraUcreti.setValue(String.valueOf(arac.getGunlukKiralamaUreti()));
-
+        item = new BeanItem<Arac>(arac);
+        binder = new FieldGroup(item);
+        binder.bindMemberFields(this);
     }
 
     private void updateTable() {
@@ -115,40 +141,37 @@ public class ArabaEkleContentView extends HorizontalLayout {
 
     private void buildFormLayout() {
         formLayout = new FormLayout();
+        addComponent(formLayout);
 
-        idField = new TextField("ID");
+        idField = new StTextField("ID");
         idField.setEnabled(false);
         formLayout.addComponent(idField);
 
-        markaField = new TextField("Marka");
+        markaField = new StTextField("Marka");
         formLayout.addComponent(markaField);
 
-        modelField = new TextField("Model");
+        modelField = new StTextField("Model");
         formLayout.addComponent(modelField);
 
-        koltukSayisiField = new TextField("Koltuk Sayısı");
+        koltukSayisiField = new StTextField("Koltuk Sayısı");
         formLayout.addComponent(koltukSayisiField);
 
-        kapiSayisiField = new TextField("Kapı Sayısı");
+        kapiSayisiField = new StTextField("Kapı Sayısı");
         formLayout.addComponent(kapiSayisiField);
 
         klimali = new CheckBox("Klima");
         formLayout.addComponent(klimali);
 
         yakitTuruComboBox = new ComboBox("Yakıt Türü");
-        for (EnumYakitTuru value : EnumYakitTuru.values()) {
-            yakitTuruComboBox.addItem(value);
-        }
+        fillComboBoxwithEnumYakitTuru();
         formLayout.addComponent(yakitTuruComboBox);
 
         vitesTuruComboBox = new ComboBox("Vites Türü");
-        for (EnumVitesTuru value : EnumVitesTuru.values()) {
-            vitesTuruComboBox.addItem(value);
-        }
+        fillComboBoxwithEnumVitesTuru();
         formLayout.addComponent(vitesTuruComboBox);
 
-        gunlulKiraUcreti = new TextField("Günlük Kira Ücreti");
-        formLayout.addComponent(gunlulKiraUcreti);
+        gunlukKiraUcreti = new StTextField("Günlük Kira Ücreti");
+        formLayout.addComponent(gunlukKiraUcreti);
 
         saveButton = new SaveButton();
         saveButton.addClickListener(new Button.ClickListener() {
@@ -156,7 +179,7 @@ public class ArabaEkleContentView extends HorizontalLayout {
             public void buttonClick(Button.ClickEvent event) {
                 saveView();
                 updateTable();
-                resetFormLayoutComponents();
+                fillViewByArac(new Arac());
             }
         });
         formLayout.addComponent(saveButton);
@@ -169,7 +192,7 @@ public class ArabaEkleContentView extends HorizontalLayout {
                     AracDao aracDao = new AracDao();
                     aracDao.deleteArac(arac);
                     updateTable();
-                    resetFormLayoutComponents();
+                    fillViewByArac(new Arac());
             }
         });
         formLayout.addComponent(deleteButton);
@@ -177,25 +200,28 @@ public class ArabaEkleContentView extends HorizontalLayout {
 
     }
 
+    private void fillComboBoxwithEnumYakitTuru() {
+        for (EnumYakitTuru value : EnumYakitTuru.values()) {
+            yakitTuruComboBox.addItem(value);
+        }
+    }
+
+    private void fillComboBoxwithEnumVitesTuru() {
+        for (EnumVitesTuru value : EnumVitesTuru.values()) {
+            vitesTuruComboBox.addItem(value);
+        }
+    }
+
     private void saveView() {
-        Long idFieldValue = null;
-        if (idField.getValue() != "") {
-            idFieldValue = Long.parseLong(idField.getValue());
+        try {
+            binder.commit();
+            Arac arac = item.getBean();
+            AracDao aracDao = new AracDao();
+            arac = aracDao.araciKaydet(arac);
+        } catch (FieldGroup.CommitException e) {
+            e.printStackTrace();
         }
 
-        Arac arac = new Arac();
-        arac.setId(idFieldValue);
-        arac.setAracMarka(markaField.getValue());
-        arac.setAracModel(modelField.getValue());
-        arac.setEnumYakitTuru((EnumYakitTuru) yakitTuruComboBox.getValue());
-        arac.setEnumVitesTuru((EnumVitesTuru) vitesTuruComboBox.getValue());
-        arac.setKapiSayisi(Integer.valueOf(kapiSayisiField.getValue()));
-        arac.setKoltukSayisi(Integer.valueOf(koltukSayisiField.getValue()));
-        arac.setKlimali(klimali.getValue());
-        arac.setGunlukKiralamaUreti(Float.parseFloat(gunlulKiraUcreti.getValue()));
-
-        AracDao aracDao = new AracDao();
-        arac = aracDao.araciKaydet(arac);
     }
 
     private void resetFormLayoutComponents() {
@@ -206,7 +232,7 @@ public class ArabaEkleContentView extends HorizontalLayout {
         vitesTuruComboBox.select(null);
         kapiSayisiField.setValue("");
         koltukSayisiField.setValue("");
-        gunlulKiraUcreti.setValue("");
+        gunlukKiraUcreti.setValue("");
         klimali.setValue(false);
     }
 }

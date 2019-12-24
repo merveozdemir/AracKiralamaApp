@@ -3,12 +3,12 @@ package com.vaadin.domain;
 import com.vaadin.common.BaseDomain;
 import com.vaadin.domain.enums.EnumVitesTuru;
 import com.vaadin.domain.enums.EnumYakitTuru;
-import org.hibernate.envers.Audited;
+//import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
-@Audited
+//@Audited
 @Entity
 @Table(name = "ARAC")
 public class Arac extends BaseDomain {
@@ -32,7 +32,7 @@ public class Arac extends BaseDomain {
     private int kapiSayisi;
 
     @Column
-    private Boolean klimali;
+    private boolean klimali;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 8)
@@ -85,11 +85,11 @@ public class Arac extends BaseDomain {
         this.kapiSayisi = kapiSayisi;
     }
 
-    public Boolean isKlimali() {
+    public boolean isKlimali() {
         return klimali;
     }
 
-    public void setKlimali(Boolean klimali) {
+    public void setKlimali(boolean klimali) {
         this.klimali = klimali;
     }
 

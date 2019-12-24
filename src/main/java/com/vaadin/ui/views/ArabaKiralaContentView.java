@@ -4,6 +4,9 @@ import com.vaadin.MyUI;
 import com.vaadin.dao.AracDao;
 import com.vaadin.dao.KiralamaDao;
 import com.vaadin.data.Item;
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.fieldgroup.PropertyId;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.domain.Arac;
 import com.vaadin.domain.enums.EnumAlisOfisi;
@@ -12,6 +15,7 @@ import com.vaadin.domain.enums.EnumYakitTuru;
 import com.vaadin.domain.Kiralama;
 import com.vaadin.domain.Kullanici;
 import com.vaadin.event.ItemClickEvent;
+import com.vaadin.shared.ui.MultiSelectMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.components.SaveButton;
 
@@ -20,14 +24,22 @@ import java.util.List;
 public class ArabaKiralaContentView extends HorizontalLayout {
     FormLayout formLayout;
     TextField idField;
+
+    @PropertyId("kiralamaBaslangicTarihi")
     DateField kiralamaBaslangicField;
+
+    @PropertyId("kiralamaBitisTarihi")
     DateField kiralamaBitisField;
+
+    @PropertyId("enumAlisOfisi")
+    ComboBox alisOfisiCombobox;
+
     Table table;
     IndexedContainer indexedContainer;
     Arac arac;
     VerticalLayout formAndTextLayout;
-    ComboBox alisOfisiCombobox;
-
+    BeanItem<Kiralama> item;
+    FieldGroup binder;
 
     public ArabaKiralaContentView() {
         setSpacing(true);
@@ -35,10 +47,18 @@ public class ArabaKiralaContentView extends HorizontalLayout {
         buildFormAndTextLayout();
         addComponent(formAndTextLayout);
 
+        fillViewByKiralama(new Kiralama());
+
         buildTableContainer();
         buildTable();
         fillTable();
         addComponent(table);
+    }
+
+    private void fillViewByKiralama(Kiralama kiralama) {
+        item = new BeanItem<Kiralama>(kiralama);
+        binder = new FieldGroup(item);
+        binder.bindMemberFields(this);
     }
 
     private void buildTableContainer() {
@@ -67,7 +87,7 @@ public class ArabaKiralaContentView extends HorizontalLayout {
             item.getItemProperty("yakitTuru").setValue(arac.getEnumYakitTuru());
             item.getItemProperty("vitesTuru").setValue(arac.getEnumVitesTuru());
 
-            if (arac.isKlimali().equals(true)) {
+            if (arac.isKlimali() == (true)) {
                 item.getItemProperty("klimali").setValue("Var");
             } else {
                 item.getItemProperty("klimali").setValue("Yok");
@@ -82,23 +102,26 @@ public class ArabaKiralaContentView extends HorizontalLayout {
         table.setHeight("400px");
         table.setWidth("650px");
         table.setContainerDataSource(indexedContainer);
+        table.setSelectable(true);
+        table.setMultiSelectMode(MultiSelectMode.SIMPLE);
+        table.setMultiSelect(false);
         table.setColumnHeaders("NO", "MARKA", "MODEL", "KAPI SAYISI", "KOLTUK SAYISI", "YAKIT TÜRÜ", "VİTES TÜRÜ", "KLİMA DURUMU", "GÜNLÜK KİRA ÜCRETİ");
         table.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent itemClickEvent) {
                 arac = (Arac) itemClickEvent.getItemId();
-                idField.setValue(arac.getId().toString());
+                idField.setValue(arac.toString());
             }
         });
     }
 
     private void buildFormAndTextLayout() {
         formAndTextLayout = new VerticalLayout();
+
         formLayout = new FormLayout();
         formAndTextLayout.addComponent(formLayout);
 
-
-        idField = new TextField("Araba No");
+        idField = new TextField("Araba ");
         idField.setEnabled(false);
         formLayout.addComponent(idField);
 
@@ -118,36 +141,38 @@ public class ArabaKiralaContentView extends HorizontalLayout {
         saveButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                Kiralama kiralama = saveView();
-
-                TextArea bilgilendirmeArea = new TextArea();
-                bilgilendirmeArea.setWidth("350px");
-                bilgilendirmeArea.setEnabled(false);
-                bilgilendirmeArea.setValue("Kiralama Numaranız: " + kiralama.getId() + " \n" +
-                        "Araç numarası: " + kiralama.getArac().getId() +
-                        "\nBaşlangıç Tarihi: " + kiralama.getKiralamaBaslangicTarihi() +
-                        "\nBitiş Tarihi: " + kiralama.getKiralamaBitisTarihi().toString() +
-                        "\nAlış Ofisi: " + kiralama.getEnumAlisOfisi());
-                formAndTextLayout.addComponent(bilgilendirmeArea);
+               saveView();
+//                TextArea bilgilendirmeArea = new TextArea();
+//                bilgilendirmeArea.setWidth("350px");
+//                bilgilendirmeArea.setEnabled(false);
+//                bilgilendirmeArea.setValue("Kiralama Numaranız: " + kiralama.getId() + " \n" +
+//                        "Araç numarası: " + kiralama.getArac().getId() +
+//                        "\nBaşlangıç Tarihi: " + kiralama.getKiralamaBaslangicTarihi() +
+//                        "\nBitiş Tarihi: " + kiralama.getKiralamaBitisTarihi().toString() +
+//                        "\nAlış Ofisi: " + kiralama.getEnumAlisOfisi());
+//                formAndTextLayout.addComponent(bilgilendirmeArea);
             }
         });
         formLayout.addComponent(saveButton);
 
     }
 
-    private Kiralama saveView() {
-        MyUI myUI = (MyUI) UI.getCurrent();
-        Kullanici kullanici = myUI.getMyKullanici();
+    private void saveView() {
 
-        Kiralama kiralama = new Kiralama();
-        kiralama.setArac(arac);
-        kiralama.setKullanici(kullanici);
-        kiralama.setKiralamaBaslangicTarihi(kiralamaBaslangicField.getValue());
-        kiralama.setKiralamaBitisTarihi(kiralamaBitisField.getValue());
-        kiralama.setEnumAlisOfisi((EnumAlisOfisi) alisOfisiCombobox.getValue());
+        try {
+            binder.commit();
+            MyUI myUI = (MyUI) UI.getCurrent();
+            Kullanici kullanici = myUI.getMyKullanici();
 
-        KiralamaDao kiralamaDao = new KiralamaDao();
-        kiralama = kiralamaDao.kiralamaKaydet(kiralama);
-        return kiralama;
+            Kiralama kiralama = item.getBean();
+            kiralama.setArac(arac);
+            kiralama.setKullanici(kullanici);
+
+            KiralamaDao kiralamaDao = new KiralamaDao();
+            kiralama = kiralamaDao.kiralamaKaydet(kiralama);
+        } catch (FieldGroup.CommitException e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -27,7 +27,6 @@ public class AracDao {
 
     public List<Arac> tumAraclariGetir(){
         List<Arac> aracList = null;
-        Map<String, Arac> aracMap = new HashMap();
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         try (Session session = sessionFactory.openSession();) {
             String hql = "Select arac From Arac arac";
@@ -43,10 +42,7 @@ public class AracDao {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         try (Session session = sessionFactory.openSession();) {
             session.getTransaction().begin();
-            String hql = "delete from Arac arac where arac.id=:id";
-            Query query = session.createQuery(hql);
-            query.setParameter("id", arac.getId());
-            query.executeUpdate();
+            session.delete(arac);
             session.getTransaction().commit();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
