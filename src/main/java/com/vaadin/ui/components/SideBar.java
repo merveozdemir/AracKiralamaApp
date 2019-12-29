@@ -10,8 +10,8 @@ public class SideBar extends VerticalLayout {
 
     public SideBar() {
 
-        setWidth(100, Unit.PERCENTAGE);
-        setHeight(100, Unit.PERCENTAGE);
+//        setWidth(100, Unit.PERCENTAGE);
+//        setHeight(100, Unit.PERCENTAGE);
         this.addStyleName(ValoTheme.LAYOUT_CARD);
 
         GirisSidebarView girisSidebarView = new GirisSidebarView();
